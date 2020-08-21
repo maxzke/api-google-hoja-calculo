@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title> Lista de canciones </title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+	<div id="app" class="container">
+		<h1> Lista de canciones </h1>
+		<table class="table">
+		  <thead class="thead-dark">
+		    <tr>
+		      <th scope="col"> Juego </th>
+		      <th scope="col"> Género </th>
+		      <th scope="col"> Valoración </th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		    <tr v-for="i in lista">
+		    	<td> {{ i.gsx$juego.$t }} </td>
+		    	<td> {{ i.gsx$genero.$t }} </td>
+		    	<td>
+                    <img v-bind:src=i.gsx$valoracion.$t width="80px"> 
+                </td>
+		    </tr>
+		  </tbody>
+		</table>
+	</div>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.js"></script>
+	<script>
+		new Vue({
+			el: '#app',
+			data: function(){
+				return {
+					lista: []
+				}
+			},
+			created: function(){
+				this.getData();
+			},
+			methods: {
+				getData: function(){
+					let that = this;
+					axios.get('https://spreadsheets.google.com/feeds/list/1lhKUblzZ4LD0Swh0Snxc565JUHSApsSMamM9ufT4RnI/od6/public/values?alt=json')
+					.then(function(response){
+						that.lista = response.data.feed.entry
+                        console.log(that.lista)
+					})
+					.catch(function(){
+						alert('Error')
+					})
+				}
+			}
+		});
+	</script>
+</body>
+</html>
